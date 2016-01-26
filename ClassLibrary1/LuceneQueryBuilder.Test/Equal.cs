@@ -1,19 +1,17 @@
 ﻿using System;
 using LuceneQueryBuilder.Test.ModelSample;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
-using LuceneQueryBuilder;
 namespace LuceneQueryBuilder.Test
 {
     [TestFixture]
     public class Equal
     {
         private Address address;
-        private ILuceneBuilder luceneBuilder;
+        private LuceneBuilder<Address> luceneBuilder;
         [SetUp]
         public void Init()
         {
-            address=new Address()
+            address = new Address()
             {
                 City = "HCM",
                 Country = "VietNam",
@@ -22,13 +20,14 @@ namespace LuceneQueryBuilder.Test
                 PostalCode = "99999",
                 Region = "Duong7"
             };
-            luceneBuilder = new LuceneBuilder();
+            luceneBuilder = new LuceneBuilder<Address>();
         }
 
         [Test]
         public void Equal_DoesMatchEqual()
         {
-            var builder=luceneBuilder.
+            var value = luceneBuilder.HaveValue(c => c.City).ToString;
+            StringAssert.Contains("City:HCM",value);
         }
     }
 }
