@@ -55,7 +55,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ModelSample\Address.cs" />
-    <Compile Include="Equal.cs" />
+    <Compile Include="LuceneQueryBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
