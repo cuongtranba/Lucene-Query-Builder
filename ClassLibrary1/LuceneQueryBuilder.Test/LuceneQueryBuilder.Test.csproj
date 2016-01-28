@@ -54,6 +54,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ModelSample\Customer.cs" />
     <Compile Include="ModelSample\Address.cs" />
     <Compile Include="LuceneQueryBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
