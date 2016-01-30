@@ -1,5 +1,4 @@
-﻿using System;
-using LuceneQueryBuilder.Test.ModelSample;
+﻿using LuceneQueryBuilder.Test.ModelSample;
 using NUnit.Framework;
 
 namespace LuceneQueryBuilder.Test
