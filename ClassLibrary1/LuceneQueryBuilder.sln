@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuceneQueryBuilder", "ClassLibrary1\LuceneQueryBuilder.csproj", "{138FD2F3-035B-4B53-9F48-8B78534BC49C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuceneQueryBuilder.Test", "LuceneQueryBuilder.Test\LuceneQueryBuilder.Test.csproj", "{388EE753-DEF6-494A-A5A3-85A03240E447}"
@@ -10,6 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{04B7E5
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C1FB49EB-A147-4357-9D9B-1EA4C4F87C2D}"
+	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
 	EndProjectSection
 EndProject
 Global
