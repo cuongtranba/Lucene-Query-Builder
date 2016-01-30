@@ -39,11 +39,16 @@ namespace LuceneQueryBuilder
 
         internal void Add(Property property)
         {
+            if (property==null)
+            {
+                return;
+            }
             whereConditionBuilder.Append(property.FieldName);
             whereConditionBuilder.Append(":");
             whereConditionBuilder.Append("\"");
             whereConditionBuilder.Append(property.Value);
             whereConditionBuilder.Append("\"");
+
         }
 
         internal void Add(Action<LuceneBuilder> action)
