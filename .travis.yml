@@ -1,8 +1,8 @@
 language: csharp
 solution: LuceneQueryBuilder.sln
-before_install:
-  - sudo apt-get install nunit-console
-before_script:
+install:
   - nuget restore LuceneQueryBuilder.sln
-after_script:
-  - nunit-console LuceneQueryBuilder.Test/bin/Release/Tests.dll
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release LuceneQueryBuilder.sln
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./LuceneQueryBuilder.Test/bin/Release/TravisSample.Test.dll
