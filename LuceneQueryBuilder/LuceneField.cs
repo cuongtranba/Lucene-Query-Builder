@@ -18,10 +18,10 @@ namespace LuceneQueryBuilder
 
             TProp value = expression.Compile()();
 
-            if (value == null || String.IsNullOrEmpty(value.ToString()))
-            {
-                return null;
-            }
+            //if (value == null || String.IsNullOrEmpty(value.ToString()))
+            //{
+            //    return null;
+            //}
             var model = new Property()
             {
                 FieldName = body.Member.Name,

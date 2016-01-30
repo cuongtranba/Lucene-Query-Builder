@@ -19,7 +19,7 @@ namespace LuceneQueryBuilder.Test
                 Line1 = "Phuoc binh",
                 Line2 = "Quan9",
                 PostalCode = "99999",
-                Region = "Duong7"
+                Region = "Duong7",
             };
             Customer = new Customer()
             {
@@ -37,6 +37,18 @@ namespace LuceneQueryBuilder.Test
             var value = luceneBuilder.HaveValue(() => address.City).ToString();
             StringAssert.AreEqualIgnoringCase("City:\"HCM\"", value);
         }
+        [Test]
+        public void ShouldNotAppendValueIfEmpty()
+        {
+            var emptyAddress=new Address()
+            {
+                City = "",
+                Line1 = "duong7,phuocbinh"
+            };
+            var value = luceneBuilder.HaveValue(() => emptyAddress.City).And().HaveValue(() => emptyAddress.Line1).ToString();
+            StringAssert.AreEqualIgnoringCase("Line1:\"duong7,phuocbinh\"", value);
+        }
+
 
         [Test]
         public void LuceneSymbolSyntax()
