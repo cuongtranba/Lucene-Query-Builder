@@ -60,7 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary1\LuceneQueryBuilder.csproj">
+    <ProjectReference Include="..\LuceneQueryBuilder\LuceneQueryBuilder.csproj">
       <Project>{138fd2f3-035b-4b53-9f48-8b78534bc49c}</Project>
       <Name>LuceneQueryBuilder</Name>
     </ProjectReference>
