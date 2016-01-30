@@ -1,6 +1,7 @@
 ﻿using System;
 using LuceneQueryBuilder.Test.ModelSample;
 using NUnit.Framework;
+
 namespace LuceneQueryBuilder.Test
 {
     [TestFixture]
@@ -21,7 +22,7 @@ namespace LuceneQueryBuilder.Test
                 PostalCode = "99999",
                 Region = "Duong7"
             };
-            Customer=new Customer()
+            Customer = new Customer()
             {
                 Address = address,
                 FirstName = "Cuong",
@@ -30,24 +31,24 @@ namespace LuceneQueryBuilder.Test
 
             luceneBuilder = new LuceneBuilder();
         }
-        
+
         [Test]
         public void HaveValueTest()
         {
-            var value = luceneBuilder.HaveValue((() => address.City)).ToString;
+            var value = luceneBuilder.HaveValue(() => address.City).ToString();
             StringAssert.AreEqualIgnoringCase("City:\"HCM\"", value);
         }
 
         [Test]
         public void LuceneSymbolSyntax()
         {
-            var value = luceneBuilder
-                .HaveValue(() => address.City)
-                .And()
-                .HaveValue(() => address.Country)
-                .Or()
-                .HaveValue((() => address.Line1))
-                .ToString;
+            var value =
+                luceneBuilder.HaveValue(() => address.City)
+                    .And()
+                    .HaveValue(() => address.Country)
+                    .Or()
+                    .HaveValue(() => address.Line1)
+                    .ToString();
             StringAssert.AreEqualIgnoringCase("City:\"HCM\" AND Country:\"VietNam\" OR Line1:\"Phuoc binh\"", value);
         }
 
@@ -61,26 +62,64 @@ namespace LuceneQueryBuilder.Test
                 .Or()
                 .HaveValue(() => address.Line1)
                 .And()
-                .Pharase(a => a.HaveValue(() => address.Line2).And().HaveValue(() => address.PostalCode))
-                .ToString;
+                .Pharase(a => a.HaveValue(() => address.Line2).And().HaveValue(() => address.PostalCode)).ToString();
+
             StringAssert.AreEqualIgnoringCase("City:\"HCM\" AND Country:\"VietNam\" OR Line1:\"Phuoc binh\" AND (Line2:\"Quan9\" AND PostalCode:\"99999\")", value);
         }
-
         [Test]
-        public void CreateQueryOnNestedObject()
+        public void PharaseAtBegin()
         {
             var value = luceneBuilder
-                .HaveValue(() => address.City)
+                .Pharase(builder => builder.HaveValue(() => address.PostalCode).And().HaveValue(() => Customer.FirstName))
                 .And()
                 .HaveValue(() => address.Country)
                 .Or()
                 .HaveValue(() => address.Line1)
                 .And()
-                .Pharase(a => a.HaveValue(() => address.Line2).And().HaveValue(() => address.PostalCode))
-                .And()
-                .HaveValue(() => Customer.Address.Region)
-                .ToString;
-            StringAssert.AreEqualIgnoringCase("City:\"HCM\" AND Country:\"VietNam\" OR Line1:\"Phuoc binh\" AND (Line2:\"Quan9\" AND PostalCode:\"99999\") AND Region:\"Duong7\"", value);
+                .Pharase(a => a.HaveValue(() => address.Line2).And().HaveValue(() => address.PostalCode)).ToString();
+
+            StringAssert.AreEqualIgnoringCase("(PostalCode:\"99999\" AND FirstName:\"Cuong\") AND Country:\"VietNam\" OR Line1:\"Phuoc binh\" AND (Line2:\"Quan9\" AND PostalCode:\"99999\")", value);
         }
+        [Test]
+        public void PharaseInPharase()
+        {
+            var value = luceneBuilder
+                .Pharase(builder =>builder
+                            .HaveValue(() => address.PostalCode)
+                            .And()
+                            .HaveValue(() => Customer.FirstName)
+                            .Or()
+                            .Pharase(builder1 => builder1
+                                        .HaveValue(() => Customer.LastName)
+                                        .Or()
+                                        .HaveValue(() => Customer.FirstName)
+                                    )
+                        )
+                .And()
+                .HaveValue(() => address.Country)
+                .Or()
+                .HaveValue(() => address.Line1)
+                .And()
+                .Pharase(a => a.HaveValue(() => address.Line2).And().HaveValue(() => address.PostalCode)).ToString();
+
+            StringAssert.AreEqualIgnoringCase("(PostalCode:\"99999\" AND FirstName:\"Cuong\" OR (LastName:\"Tran\" OR FirstName:\"Cuong\")) AND Country:\"VietNam\" OR Line1:\"Phuoc binh\" AND (Line2:\"Quan9\" AND PostalCode:\"99999\")", value);
+        }
+
+        //[Test]
+        //public void CreateQueryOnNestedObject()
+        //{
+        //    var value = luceneBuilder
+        //        .HaveValue(() => address.City)
+        //        .And()
+        //        .HaveValue(() => address.Country)
+        //        .Or()
+        //        .HaveValue(() => address.Line1)
+        //        .And()
+        //        .Pharase(a => a.HaveValue(() => address.Line2).And().HaveValue(() => address.PostalCode))
+        //        .And()
+        //        .HaveValue(() => Customer.Address.Region)
+        //        .ToString;
+        //    StringAssert.AreEqualIgnoringCase("City:\"HCM\" AND Country:\"VietNam\" OR Line1:\"Phuoc binh\" AND (Line2:\"Quan9\" AND PostalCode:\"99999\") AND Region:\"Duong7\"", value);
+        //}
     }
 }

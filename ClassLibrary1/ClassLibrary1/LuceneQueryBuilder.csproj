@@ -41,8 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LuceneBuilder.cs" />
-    <Compile Include="LuceneBuilderModel.cs" />
-    <Compile Include="NewLuceneBuilder.cs" />
+    <Compile Include="LuceneField.cs" />
+    <Compile Include="LuceneLogicSymbol.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SymbolSyntax.cs" />
   </ItemGroup>

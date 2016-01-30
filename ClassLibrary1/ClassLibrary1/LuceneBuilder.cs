@@ -1,92 +1,57 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace LuceneQueryBuilder
 {
     public class LuceneBuilder
     {
-        public new string ToString { get { return whereConditionBuilder.ToString(); } }
+        internal LuceneLogicSymbol luceneLogicSymboy;
+        internal LuceneField luceneField;
 
-        private StringBuilder whereConditionBuilder = new StringBuilder();
+        internal new string ToString { get { return whereConditionBuilder.ToString(); } }
 
-        public LuceneBuilder HaveValue<TProp>(Expression<Func<TProp>> expression)
+        internal StringBuilder whereConditionBuilder = new StringBuilder();
+
+        public LuceneBuilder()
         {
-            var model = GetPropertyInfo(expression);
-            return Add(model);
+            luceneLogicSymboy=new LuceneLogicSymbol(this);
+            luceneField=new LuceneField(this);
         }
 
-
-        public LuceneBuilder And()
+        public LuceneLogicSymbol HaveValue<TProp>(Expression<Func<TProp>> expression)
         {
-            return Add(SymbolSyntax.And);
+            return luceneField.HaveValue(expression);
         }
 
-        public LuceneBuilder Or()
+        public LuceneLogicSymbol Pharase(Action<LuceneBuilder> action)
         {
-            return Add(SymbolSyntax.Or);
+            this.Add(action);
+            return luceneLogicSymboy;
         }
 
-        public LuceneBuilder Pharase()
-        {
-            return Add("");
-        }
-
-        public LuceneBuilder Not()
-        {
-            return Add(SymbolSyntax.Not);
-        }
-
-        private LuceneBuilderModel GetPropertyInfo<TProp>(Expression<Func<TProp>> expression)
-        {
-            var body = expression.Body as MemberExpression;
-
-            TProp value = expression.Compile()();
-
-            var model = new LuceneBuilderModel()
-                        {
-                            FieldName = body.Member.Name,
-                            Value = value.ToString()
-                        };
-            return model;
-        }
-
-
-        private LuceneBuilder Add(LuceneBuilderModel model)
-        {
-            whereConditionBuilder.Append(model.FieldName);
-            whereConditionBuilder.Append(":");
-            whereConditionBuilder.Append("\"");
-            whereConditionBuilder.Append(model.Value);
-            whereConditionBuilder.Append("\"");
-            return this;
-        }
-
-
-        private LuceneBuilder Add(string syntax)
+        internal void Add(string syntax)
         {
             whereConditionBuilder.Append(" ");
             whereConditionBuilder.Append(syntax);
             whereConditionBuilder.Append(" ");
-            return this;
         }
 
-        private LuceneBuilder Add(Action<LuceneBuilder> action)
+        internal void Add(Property property)
+        {
+            whereConditionBuilder.Append(property.FieldName);
+            whereConditionBuilder.Append(":");
+            whereConditionBuilder.Append("\"");
+            whereConditionBuilder.Append(property.Value);
+            whereConditionBuilder.Append("\"");
+        }
+
+        internal void Add(Action<LuceneBuilder> action)
         {
             whereConditionBuilder.Append("(");
             action(this);
             whereConditionBuilder.Append(")");
-            return this;
         }
-
-        public LuceneBuilder Pharase(Action<LuceneBuilder> action)
-        {
-            return Add(action);
-        }
-
     }
+
 }
