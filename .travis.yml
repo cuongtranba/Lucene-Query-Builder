@@ -4,5 +4,5 @@ install:
   - nuget restore LuceneQueryBuilder.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=Release LuceneQueryBuilder.sln
+  - xbuild /p:Configuration=Release ./ClassLibrary1/LuceneQueryBuilder.sln
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./LuceneQueryBuilder.Test/bin/Release/LuceneQueryBuilder.Test.dll
