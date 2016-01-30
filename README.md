@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/herrylove72/Lucene-Query-Builder.svg?branch=master)](https://travis-ci.org/herrylove72/Lucene-Query-Builder)
 # Lucene-Query-Builder
 This library help reduce magic string when we create query clause by lucene
 # How to get started
