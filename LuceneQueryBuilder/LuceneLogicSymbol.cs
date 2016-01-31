@@ -21,8 +21,6 @@
             return luceneBuilder.luceneField;
         }
 
-    
-
         public override string ToString()
         {
             return luceneBuilder.ToString;

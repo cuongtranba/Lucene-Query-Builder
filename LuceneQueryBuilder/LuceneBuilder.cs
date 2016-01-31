@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -9,14 +11,29 @@ namespace LuceneQueryBuilder
         internal LuceneLogicSymbol luceneLogicSymboy;
         internal LuceneField luceneField;
 
-        internal new string ToString { get { return whereConditionBuilder.ToString(); } }
+        internal new string ToString
+        {
+            get
+            {
+                var listValue = stack.ToList();
+                listValue.Reverse();
+                foreach (var value in listValue)
+                {
+                    whereConditionBuilder.Append(value);
+                }
+                return whereConditionBuilder.ToString();
+            }
+        }
 
         internal StringBuilder whereConditionBuilder = new StringBuilder();
+        private Stack<string> stack = new Stack<string>();
+        private bool IsEmpty { get; set; }
 
         public LuceneBuilder()
         {
-            luceneLogicSymboy=new LuceneLogicSymbol(this);
-            luceneField=new LuceneField(this);
+            IsEmpty = false;
+            luceneLogicSymboy = new LuceneLogicSymbol(this);
+            luceneField = new LuceneField(this);
         }
 
         public LuceneLogicSymbol HaveValue<TProp>(Expression<Func<TProp>> expression)
@@ -32,30 +49,51 @@ namespace LuceneQueryBuilder
 
         internal void Add(string syntax)
         {
-            whereConditionBuilder.Append(" ");
-            whereConditionBuilder.Append(syntax);
-            whereConditionBuilder.Append(" ");
+            if (stack.Count > 0)
+            {
+                var valueBefore = stack.Peek().Trim();
+                if (SymbolSyntax.SymbolSyntaxtList.Contains(valueBefore))
+                {
+                    stack.Pop();
+                }
+                else if (valueBefore == SymbolSyntax.BeginPharase)
+                {
+                    return;
+                }
+            }
+            if (stack.Count == 0)
+            {
+                return;
+            }
+            stack.Push(String.Format(" {0} ", syntax));
         }
 
         internal void Add(Property property)
         {
-            if (property==null)
+            if (property != null)
             {
-                return;
+                stack.Push(String.Format("{0}:\"{1}\"", property.FieldName, property.Value));
             }
-            whereConditionBuilder.Append(property.FieldName);
-            whereConditionBuilder.Append(":");
-            whereConditionBuilder.Append("\"");
-            whereConditionBuilder.Append(property.Value);
-            whereConditionBuilder.Append("\"");
-
         }
 
         internal void Add(Action<LuceneBuilder> action)
         {
-            whereConditionBuilder.Append("(");
+            stack.Push("(");
             action(this);
-            whereConditionBuilder.Append(")");
+            if (stack.Count > 0)
+            {
+                var valueBefore = stack.Peek().Trim();
+                if (SymbolSyntax.SymbolSyntaxtList.Contains(valueBefore))
+                {
+                    stack.Pop();
+                }
+                else if (valueBefore == SymbolSyntax.BeginPharase)
+                {
+                    stack.Pop();
+                    return;
+                }
+            }
+            stack.Push(")");
         }
     }
 
