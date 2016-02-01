@@ -49,7 +49,7 @@ namespace LuceneQueryBuilder
 
         internal void Add(string syntax)
         {
-            if (stack.Count > 0)
+            if (stack.IsEmpty() == false)
             {
                 var valueBefore = stack.Peek().Trim();
                 if (SymbolSyntax.SymbolSyntaxtList.Contains(valueBefore))
@@ -61,7 +61,7 @@ namespace LuceneQueryBuilder
                     return;
                 }
             }
-            if (stack.Count == 0)
+            if (stack.IsEmpty())
             {
                 return;
             }
@@ -80,7 +80,7 @@ namespace LuceneQueryBuilder
         {
             stack.Push("(");
             action(this);
-            if (stack.Count > 0)
+            if (stack.IsEmpty() == false)
             {
                 var valueBefore = stack.Peek().Trim();
                 if (SymbolSyntax.SymbolSyntaxtList.Contains(valueBefore))
