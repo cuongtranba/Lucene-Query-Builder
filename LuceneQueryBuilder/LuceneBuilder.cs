@@ -36,6 +36,11 @@ namespace LuceneQueryBuilder
             luceneField = new LuceneField(this);
         }
 
+        public static LuceneBuilder Create()
+        {
+            return new LuceneBuilder();
+        }
+
         public LuceneLogicSymbol HaveValue<TProp>(Expression<Func<TProp>> expression)
         {
             return luceneField.HaveValue(expression);

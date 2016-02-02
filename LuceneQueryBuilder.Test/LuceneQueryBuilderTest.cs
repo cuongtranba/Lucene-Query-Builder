@@ -9,7 +9,6 @@ namespace LuceneQueryBuilder.Test
     {
         private Address address;
         private Customer Customer;
-        private LuceneBuilder luceneBuilder;
         [SetUp]
         public void Init()
         {
@@ -28,14 +27,12 @@ namespace LuceneQueryBuilder.Test
                 FirstName = "Cuong",
                 LastName = "Tran"
             };
-
-            luceneBuilder = new LuceneBuilder();
         }
 
         [Test]
         public void HaveValueTest()
         {
-            var expected = luceneBuilder.HaveValue(() => address.City).ToString();
+            var expected = LuceneBuilder.Create().HaveValue(() => address.City).ToString();
             StringAssert.AreEqualIgnoringCase("City:\"HCM\"", expected);
         }
         [Test]
@@ -46,7 +43,7 @@ namespace LuceneQueryBuilder.Test
                 City = "",
                 Line1 = "duong7,phuocbinh"
             };
-            var expected = luceneBuilder.HaveValue(() => emptyAddress.City).And().HaveValue(() => emptyAddress.Line1).ToString();
+            var expected = LuceneBuilder.Create().HaveValue(() => emptyAddress.City).And().HaveValue(() => emptyAddress.Line1).ToString();
             StringAssert.AreEqualIgnoringCase("Line1:\"duong7,phuocbinh\"", expected);
         }
 
@@ -58,7 +55,7 @@ namespace LuceneQueryBuilder.Test
                 City = null,
                 Line1 = "duong7,phuocbinh"
             };
-            var expected = luceneBuilder.HaveValue(() => emptyAddress.City).And().HaveValue(() => emptyAddress.Line1).ToString();
+            var expected = LuceneBuilder.Create().HaveValue(() => emptyAddress.City).And().HaveValue(() => emptyAddress.Line1).ToString();
             StringAssert.AreEqualIgnoringCase("Line1:\"duong7,phuocbinh\"", expected);
         }
 
@@ -71,7 +68,7 @@ namespace LuceneQueryBuilder.Test
                 City = null,
                 Line1 = "duong7,phuocbinh"
             };
-            var expected = luceneBuilder
+            var expected = LuceneBuilder.Create()
                 .HaveValue(() => emptyAddress.PostalCode)
                 .Or()
                 .HaveValue(() => emptyAddress.City)
@@ -90,7 +87,7 @@ namespace LuceneQueryBuilder.Test
                 Line1 = "duong7,phuocbinh",
                 Region = "Hanoi"
             };
-            var expected = luceneBuilder
+            var expected = LuceneBuilder.Create()
                 .HaveValue(() => emptyAddress.PostalCode)
                 .Or()
                 .HaveValue(() => emptyAddress.City)
@@ -104,7 +101,7 @@ namespace LuceneQueryBuilder.Test
         public void LuceneSymbolSyntax()
         {
             var expected =
-                luceneBuilder.HaveValue(() => address.City)
+                LuceneBuilder.Create().HaveValue(() => address.City)
                     .And()
                     .HaveValue(() => address.Country)
                     .Or()
@@ -116,7 +113,7 @@ namespace LuceneQueryBuilder.Test
         [Test]
         public void Pharase()
         {
-            var expected = luceneBuilder
+            var expected = LuceneBuilder.Create()
                 .HaveValue(() => address.City)
                 .And()
                 .HaveValue(() => address.Country)
@@ -130,7 +127,7 @@ namespace LuceneQueryBuilder.Test
         [Test]
         public void PharaseAtBegin()
         {
-            var expected = luceneBuilder
+            var expected = LuceneBuilder.Create()
                 .Pharase(builder => builder.HaveValue(() => address.PostalCode).And().HaveValue(() => Customer.FirstName))
                 .And()
                 .HaveValue(() => address.Country)
@@ -144,7 +141,7 @@ namespace LuceneQueryBuilder.Test
         [Test]
         public void PharaseInPharase()
         {
-            var expected = luceneBuilder
+            var expected = LuceneBuilder.Create()
                 .Pharase(builder =>builder
                             .HaveValue(() => address.PostalCode)
                             .And()
@@ -175,7 +172,7 @@ namespace LuceneQueryBuilder.Test
                 PostalCode = ""
             };
             var expected =
-                luceneBuilder.Pharase(
+                LuceneBuilder.Create().Pharase(
                     builder =>
                         builder.HaveValue(() => emptyAddress.Line1)
                             .And()
@@ -195,7 +192,7 @@ namespace LuceneQueryBuilder.Test
                 PostalCode = ""
             };
             var expected =
-                luceneBuilder.Pharase(
+                LuceneBuilder.Create().Pharase(
                     builder =>
                         builder.HaveValue(() => emptyAddress.Line1)
                             .And()
@@ -205,21 +202,5 @@ namespace LuceneQueryBuilder.Test
 
             StringAssert.AreEqualIgnoringCase("(Country:\"VietName\")", expected);
         }
-        //[Test]
-        //public void CreateQueryOnNestedObject()
-        //{
-        //    var value = luceneBuilder
-        //        .HaveValue(() => address.City)
-        //        .And()
-        //        .HaveValue(() => address.Country)
-        //        .Or()
-        //        .HaveValue(() => address.Line1)
-        //        .And()
-        //        .Pharase(a => a.HaveValue(() => address.Line2).And().HaveValue(() => address.PostalCode))
-        //        .And()
-        //        .HaveValue(() => Customer.Address.Region)
-        //        .ToString;
-        //    StringAssert.AreEqualIgnoringCase("City:\"HCM\" AND Country:\"VietNam\" OR Line1:\"Phuoc binh\" AND (Line2:\"Quan9\" AND PostalCode:\"99999\") AND Region:\"Duong7\"", value);
-        //}
     }
 }
