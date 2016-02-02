@@ -19,13 +19,13 @@ namespace LuceneQueryBuilder
                 listValue.Reverse();
                 foreach (var value in listValue)
                 {
-                    whereConditionBuilder.Append(value);
+                    queryText.Append(value);
                 }
-                return whereConditionBuilder.ToString();
+                return queryText.ToString();
             }
         }
 
-        internal StringBuilder whereConditionBuilder = new StringBuilder();
+        internal StringBuilder queryText = new StringBuilder();
         private Stack<string> stack = new Stack<string>();
         private bool IsEmpty { get; set; }
 
@@ -41,7 +41,7 @@ namespace LuceneQueryBuilder
             return new LuceneBuilder();
         }
 
-        public LuceneLogicSymbol HaveValue<TProp>(Expression<Func<TProp>> expression)
+        public LuceneLogicSymbol WhereEquals<TProp>(Expression<Func<TProp>> expression)
         {
             return luceneField.HaveValue(expression);
         }
