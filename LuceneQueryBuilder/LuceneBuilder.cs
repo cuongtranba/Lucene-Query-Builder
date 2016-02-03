@@ -3,37 +3,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LuceneQueryBuilder
 {
-    public class LuceneBuilder
+    public class LuceneBuilder : IBaseQueryFluent
     {
-        internal LuceneLogicSymbol luceneLogicSymboy;
-        internal LuceneField luceneField;
+        private StringBuilder queryText = new StringBuilder();
 
-        internal new string ToString
+        IFieldFluent ILogicSymbolFluent.And()
         {
-            get
-            {
-                var listValue = stack.ToList();
-                listValue.Reverse();
-                foreach (var value in listValue)
-                {
-                    queryText.Append(value);
-                }
-                return queryText.ToString();
-            }
+            return Add(" " + SymbolSyntax.And + " ");
         }
 
-        internal StringBuilder queryText = new StringBuilder();
-        private Stack<string> stack = new Stack<string>();
-        private bool IsEmpty { get; set; }
-
-        public LuceneBuilder()
+        IFieldFluent ILogicSymbolFluent.Or()
         {
-            IsEmpty = false;
-            luceneLogicSymboy = new LuceneLogicSymbol(this);
-            luceneField = new LuceneField(this);
+            return Add(" " + SymbolSyntax.Or + " ");
+        }
+
+        public ILogicSymbolFluent WhereEquals<TProp>(Expression<Func<TProp>> expression)
+        {
+            return Add(expression.GetPropertyNameAndValue());
+        }
+
+        public ILogicSymbolFluent Pharase(Action<IFieldFluent> action)
+        {
+            Add("(");
+            action(this);
+            Add(")");
+            return this;
+        }
+
+        public ILogicSymbolFluent Not<TProp>(Expression<Func<TProp>> expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ILogicSymbolFluent StartWith<TProp>(Expression<Func<TProp>> expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ILogicSymbolFluent EndWith<TProp>(Expression<Func<TProp>> expression)
+        {
+            throw new NotImplementedException();
         }
 
         public static LuceneBuilder Create()
@@ -41,80 +54,17 @@ namespace LuceneQueryBuilder
             return new LuceneBuilder();
         }
 
-        public LuceneLogicSymbol WhereEquals<TProp>(Expression<Func<TProp>> expression)
+        public override string ToString()
         {
-            return luceneField.WhereEquals(expression);
+            return queryText.ToString();
         }
 
-        public LuceneLogicSymbol Not<TProp>(Expression<Func<TProp>> expression)
+
+        private LuceneBuilder Add(string value)
         {
-            return luceneField.Not(expression);
+            queryText.Append(value);
+            return this;
         }
 
-        public LuceneLogicSymbol StartWith<TProp>(Expression<Func<TProp>> expression)
-        {
-            return luceneField.StartWith(expression);
-        }
-
-        public LuceneLogicSymbol EndWith<TProp>(Expression<Func<TProp>> expression)
-        {
-            return luceneField.EndWith(expression);
-        }
-
-        public LuceneLogicSymbol Pharase(Action<LuceneBuilder> action)
-        {
-            this.Add(action);
-            return luceneLogicSymboy;
-        }
-
-        internal void Add(string syntax)
-        {
-            if (stack.IsEmpty() == false)
-            {
-                var valueBefore = stack.Peek().Trim();
-                if (SymbolSyntax.SymbolSyntaxtList.Contains(valueBefore))
-                {
-                    stack.Pop();
-                }
-                else if (valueBefore == SymbolSyntax.BeginPharase)
-                {
-                    return;
-                }
-            }
-            if (stack.IsEmpty())
-            {
-                return;
-            }
-            stack.Push(String.Format(" {0} ", syntax));
-        }
-
-        internal void Add(Property property)
-        {
-            if (property != null)
-            {
-                stack.Push(String.Format("{0}:\"{1}\"", property.FieldName, property.Value));
-            }
-        }
-
-        internal void Add(Action<LuceneBuilder> action)
-        {
-            stack.Push("(");
-            action(this);
-            if (stack.IsEmpty() == false)
-            {
-                var valueBefore = stack.Peek().Trim();
-                if (SymbolSyntax.SymbolSyntaxtList.Contains(valueBefore))
-                {
-                    stack.Pop();
-                }
-                else if (valueBefore == SymbolSyntax.BeginPharase)
-                {
-                    stack.Pop();
-                    return;
-                }
-            }
-            stack.Push(")");
-        }
     }
-
 }

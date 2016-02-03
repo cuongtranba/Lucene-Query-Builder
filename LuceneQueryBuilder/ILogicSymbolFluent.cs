@@ -9,5 +9,6 @@ namespace LuceneQueryBuilder
     public interface ILogicSymbolFluent
     {
         IFieldFluent And();
+        IFieldFluent Or();
     }
 }
