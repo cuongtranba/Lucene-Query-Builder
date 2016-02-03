@@ -26,7 +26,7 @@ namespace LuceneQueryBuilder.Test
                                     b => b
                                     .WhereEquals(() => addressEmpty.Country)
                                     .And()
-                                    .HaveValue(() => addressEmpty.City)
+                                    .WhereEquals(() => addressEmpty.City)
                                 )
                         ).ToString();
             StringAssert.AreEqualIgnoringCase(String.Empty, actual);
@@ -46,7 +46,7 @@ namespace LuceneQueryBuilder.Test
                     .And()
                     .Pharase(
                         builder =>
-                            builder.WhereEquals(() => addressEmpty.PostalCode).And().HaveValue(() => addressEmpty.Region)).ToString();
+                            builder.WhereEquals(() => addressEmpty.PostalCode).And().WhereEquals(() => addressEmpty.Region)).ToString();
                 
             StringAssert.AreEqualIgnoringCase(String.Empty, actual);
         }

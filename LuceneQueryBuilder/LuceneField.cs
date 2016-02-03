@@ -35,7 +35,7 @@ namespace LuceneQueryBuilder
             this.luceneBuilder = luceneBuilder;
         }
 
-        public LuceneLogicSymbol HaveValue<TProp>(Expression<Func<TProp>> expression)
+        public LuceneLogicSymbol WhereEquals<TProp>(Expression<Func<TProp>> expression)
         {
             luceneBuilder.Add(GetPropertyInfo(expression));
             return luceneBuilder.luceneLogicSymboy;

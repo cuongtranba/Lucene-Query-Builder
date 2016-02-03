@@ -43,7 +43,7 @@ namespace LuceneQueryBuilder
 
         public LuceneLogicSymbol WhereEquals<TProp>(Expression<Func<TProp>> expression)
         {
-            return luceneField.HaveValue(expression);
+            return luceneField.WhereEquals(expression);
         }
 
         public LuceneLogicSymbol Pharase(Action<LuceneBuilder> action)
