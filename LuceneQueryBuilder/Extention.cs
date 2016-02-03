@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
 
 namespace LuceneQueryBuilder
 {
@@ -13,19 +11,6 @@ namespace LuceneQueryBuilder
                 return true;
             }
             return false;
-        }
-
-        public static string GetPropertyNameAndValue<TProp>(this Expression<Func<TProp>> expression)
-        {
-            var body = expression.Body as MemberExpression;
-
-            TProp value = expression.Compile()();
-
-            if (value == null || String.IsNullOrEmpty(value.ToString()))
-            {
-                return string.Empty;
-            }
-            return string.Format("{0}:\"{1}\"", body.Member.Name, value.ToString());
         }
     }
 }
