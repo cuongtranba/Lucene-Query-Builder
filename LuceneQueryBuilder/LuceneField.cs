@@ -46,6 +46,20 @@ namespace LuceneQueryBuilder
             return luceneBuilder.luceneLogicSymboy;
         }
 
+        public LuceneLogicSymbol Not<TProp>(Expression<Func<TProp>> expression)
+        {
+            return luceneBuilder.luceneLogicSymboy;
+        }
+
+        internal LuceneLogicSymbol StartWith<TProp>(Expression<Func<TProp>> expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal LuceneLogicSymbol EndWith<TProp>(Expression<Func<TProp>> expression)
+        {
+            throw new NotImplementedException();
+        }
     }
     class Property
     {
