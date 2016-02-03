@@ -56,6 +56,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="EmptyPropertyTest.cs" />
+    <Compile Include="LuceneQueryBuilderNewTest.cs" />
     <Compile Include="LuceneQueryBuilderTest.cs" />
     <Compile Include="ModelSample\Customer.cs" />
     <Compile Include="ModelSample\Address.cs" />

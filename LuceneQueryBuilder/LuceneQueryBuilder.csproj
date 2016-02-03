@@ -41,11 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IBaseQueryFluent.cs" />
+    <Compile Include="IFieldFluent.cs" />
+    <Compile Include="ILogicSymbolFluent.cs" />
     <Compile Include="LuceneBuilder.cs" />
+    <Compile Include="LuceneBuilderNew.cs" />
     <Compile Include="LuceneField.cs" />
     <Compile Include="LuceneLogicSymbol.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StackExtention.cs" />
+    <Compile Include="Extention.cs" />
     <Compile Include="SymbolSyntax.cs" />
   </ItemGroup>
   <ItemGroup>

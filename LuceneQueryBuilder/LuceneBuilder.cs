@@ -46,6 +46,21 @@ namespace LuceneQueryBuilder
             return luceneField.HaveValue(expression);
         }
 
+        public LuceneLogicSymbol Not<TProp>(Expression<Func<TProp>> expression)
+        {
+            return luceneField.Not(expression);
+        }
+
+        public LuceneLogicSymbol StartWith<TProp>(Expression<Func<TProp>> expression)
+        {
+            return luceneField.StartWith(expression);
+        }
+
+        public LuceneLogicSymbol EndWith<TProp>(Expression<Func<TProp>> expression)
+        {
+            return luceneField.EndWith(expression);
+        }
+
         public LuceneLogicSymbol Pharase(Action<LuceneBuilder> action)
         {
             this.Add(action);
