@@ -59,7 +59,6 @@ namespace LuceneQueryBuilder
             return queryText.ToString();
         }
 
-
         private LuceneBuilder Add(string value)
         {
             queryText.Append(value);

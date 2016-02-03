@@ -28,16 +28,12 @@ namespace LuceneQueryBuilder.Test
                 LastName = "Tran"
             };
         }
-
         [Test]
         public void HaveValueTest()
         {
             var expected = LuceneBuilder.Create().WhereEquals(() => address.City).ToString();
             StringAssert.AreEqualIgnoringCase("City:\"HCM\"", expected);
         }
-
-        
-
         [Test]
         public void LuceneSymbolSyntax()
         {
@@ -50,7 +46,6 @@ namespace LuceneQueryBuilder.Test
                     .ToString();
             StringAssert.AreEqualIgnoringCase("City:\"HCM\" AND Country:\"VietNam\" OR Line1:\"Phuoc binh\"", expected);
         }
-
         [Test]
         public void Pharase()
         {
