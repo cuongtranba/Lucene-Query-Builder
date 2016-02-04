@@ -10,15 +10,16 @@ namespace LuceneQueryBuilder
     public class LuceneBuilder : IBaseQueryFluent
     {
         private StringBuilder queryText = new StringBuilder();
+        private Stack<string> stack = new Stack<string>();
 
         IFieldFluent ILogicSymbolFluent.And()
         {
-            return Add(SymbolSyntaxTemplate.And);
+            return Add(SymbolSyntaxTemplate.And, true);
         }
 
         IFieldFluent ILogicSymbolFluent.Or()
         {
-            return Add(SymbolSyntaxTemplate.Or);
+            return Add(SymbolSyntaxTemplate.Or, true);
         }
 
         public ILogicSymbolFluent WhereEquals<TProp>(Expression<Func<TProp>> expression)
@@ -28,9 +29,9 @@ namespace LuceneQueryBuilder
 
         public ILogicSymbolFluent Pharase(Action<IFieldFluent> action)
         {
-            Add("(");
+            Add("(", true);
             action(this);
-            Add(")");
+            Add(")", true);
             return this;
         }
 
@@ -56,12 +57,27 @@ namespace LuceneQueryBuilder
 
         public override string ToString()
         {
-            return queryText.ToString();
+            return queryText.Append(stack.Pop()).ToString();
         }
-      
-        private LuceneBuilder Add(string value)
+
+        private LuceneBuilder Add(string value, bool isOperator = false)
         {
-            queryText.Append(value);
+            if (isOperator == false)
+            {
+                stack.Push(value);
+            }
+            else
+            {
+                var previousValue = stack.Peek();
+                if (previousValue == String.Empty)
+                {
+                    return this;
+                }
+                else
+                {
+                    queryText.Append(previousValue).Append(value);
+                }
+            }
             return this;
         }
         private string GetPropertyNameAndValue<TProp>(Expression<Func<TProp>> expression, string type)
