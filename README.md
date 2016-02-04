@@ -1,4 +1,4 @@
-# Lucene Query Builder [![Build Status](https://travis-ci.org/herrylove72/Lucene-Query-Builder.svg?branch=master)](https://travis-ci.org/herrylove72/Lucene-Query-Builder) [![Coverage Status](https://coveralls.io/repos/github/herrylove72/Lucene-Query-Builder/badge.svg?branch=master)](https://coveralls.io/github/herrylove72/Lucene-Query-Builder?branch=master)
+# Lucene Query Builder [![Build Status](https://travis-ci.org/cuongtranba/Lucene-Query-Builder.svg?branch=master)](https://travis-ci.org/cuongtranba/Lucene-Query-Builder)
 
 
 This library help reduce magic string when we create query clause by lucene
