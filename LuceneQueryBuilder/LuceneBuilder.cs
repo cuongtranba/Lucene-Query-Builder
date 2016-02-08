@@ -10,7 +10,7 @@ namespace LuceneQueryBuilder
     public class LuceneBuilder : IBaseQueryFluent
     {
         private StringBuilder queryText = new StringBuilder();
-        private Stack<string> stack = new Stack<string>();
+        private List<string> listSyntax = new List<string>();
 
         IFieldFluent ILogicSymbolFluent.And()
         {
@@ -29,9 +29,9 @@ namespace LuceneQueryBuilder
 
         public ILogicSymbolFluent Pharase(Action<IFieldFluent> action)
         {
-            Add("(", true);
+            Add("(");
             action(this);
-            Add(")", true);
+            Add(")");
             return this;
         }
 
@@ -54,30 +54,55 @@ namespace LuceneQueryBuilder
         {
             return new LuceneBuilder();
         }
-
+        /// <summary>
+        /// build query form listSyntax and will clear list syntax if it only contains begin pharase or end pharase
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
-            return queryText.Append(stack.Pop()).ToString();
+            if (listSyntax.All(c=>c==SymbolSyntaxTemplate.BeginPharase || c== SymbolSyntaxTemplate.EndPharase))
+            {
+                listSyntax.Clear();
+            }
+            foreach (var syntax in listSyntax)
+            {
+                queryText.Append(syntax);
+            }
+            return queryText.ToString();
         }
 
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="isOperator"></param>
+        /// <returns></returns>
         private LuceneBuilder Add(string value, bool isOperator = false)
         {
-            if (isOperator == false)
+            if (!listSyntax.IsEmpty() && (value == String.Empty && isOperator == false))
             {
-                stack.Push(value);
-            }
-            else
-            {
-                var previousValue = stack.Peek();
-                if (previousValue == String.Empty)
+                if (listSyntax.PeekLast() == SymbolSyntaxTemplate.BeginPharase)
                 {
                     return this;
                 }
-                else
+                listSyntax.PopLast();
+                return this;
+            }
+            if (isOperator && !listSyntax.IsEmpty())
+            {
+                if (listSyntax.PeekLast() == SymbolSyntaxTemplate.BeginPharase)
                 {
-                    queryText.Append(previousValue).Append(value);
+                    return this;
+                }
+
+                if (listSyntax.PeekLast() == String.Empty)
+                {
+                    listSyntax.PopLast();
+                    return this;
                 }
             }
+            listSyntax.Add(value);
             return this;
         }
         private string GetPropertyNameAndValue<TProp>(Expression<Func<TProp>> expression, string type)
