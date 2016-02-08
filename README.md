@@ -29,8 +29,8 @@ Here's a couple of simple examples to give an idea of how LuceneQueryBuilder wor
             StringAssert.AreEqualIgnoringCase("City:\"HCM\" AND Country:\"VietNam\" OR Line1:\"Phuoc binh\"", value);
         }
 ```
-#####Start with
-``` City:HCM*  ```
+#####Start with ``` City:HCM*  ```
+
 ```
         [Test]
         public void StartWithTest()
@@ -39,8 +39,8 @@ Here's a couple of simple examples to give an idea of how LuceneQueryBuilder wor
             StringAssert.AreEqualIgnoringCase("City:HCM*", actual);
         }
 ```
-#####End With
-``` City:*HCM  ```
+#####End With ``` City:*HCM  ```
+
 ```
         [Test]
         public void EndWithTest()
@@ -50,6 +50,7 @@ Here's a couple of simple examples to give an idea of how LuceneQueryBuilder wor
         }
 ```
 #####In pharase ``` (PostalCode:"99999" AND FirstName:"Cuong") AND Country:"VietNam" OR Line1:"Phuoc binh" AND (Line2:"Quan9" AND PostalCode:"99999") ```
+
 ```
         [Test]
         public void PharaseAtBegin()
@@ -67,6 +68,7 @@ Here's a couple of simple examples to give an idea of how LuceneQueryBuilder wor
         }
 ```
 #####Work well if have empty or null value 
+
 ```
         [Test]
         public void ShouldNotAppendValueIfNullAndBeforeSymbolSyntax()
