@@ -49,7 +49,7 @@ End With
             StringAssert.AreEqualIgnoringCase("City:*HCM", actual);
         }
 ```
-In pharase ``` (PostalCode:"99999" AND FirstName:"Cuong") AND Country:"VietNam" OR Line1:"Phuoc binh" AND (Line2:"Quan9" AND PostalCode:"99999")" ```
+In pharase ``` (PostalCode:"99999" AND FirstName:"Cuong") AND Country:"VietNam" OR Line1:"Phuoc binh" AND (Line2:"Quan9" AND PostalCode:"99999") ```
 ```
         [Test]
         public void PharaseAtBegin()
