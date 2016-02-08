@@ -29,7 +29,7 @@ Here's a couple of simple examples to give an idea of how LuceneQueryBuilder wor
             StringAssert.AreEqualIgnoringCase("City:\"HCM\" AND Country:\"VietNam\" OR Line1:\"Phuoc binh\"", value);
         }
 ```
-Start with
+#####Start with
 ``` City:HCM*  ```
 ```
         [Test]
@@ -39,7 +39,7 @@ Start with
             StringAssert.AreEqualIgnoringCase("City:HCM*", actual);
         }
 ```
-End With
+#####End With
 ``` City:*HCM  ```
 ```
         [Test]
@@ -49,7 +49,7 @@ End With
             StringAssert.AreEqualIgnoringCase("City:*HCM", actual);
         }
 ```
-In pharase ``` (PostalCode:"99999" AND FirstName:"Cuong") AND Country:"VietNam" OR Line1:"Phuoc binh" AND (Line2:"Quan9" AND PostalCode:"99999") ```
+#####In pharase ``` (PostalCode:"99999" AND FirstName:"Cuong") AND Country:"VietNam" OR Line1:"Phuoc binh" AND (Line2:"Quan9" AND PostalCode:"99999") ```
 ```
         [Test]
         public void PharaseAtBegin()
@@ -66,7 +66,7 @@ In pharase ``` (PostalCode:"99999" AND FirstName:"Cuong") AND Country:"VietNam" 
             StringAssert.AreEqualIgnoringCase("(PostalCode:\"99999\" AND FirstName:\"Cuong\") AND Country:\"VietNam\" OR Line1:\"Phuoc binh\" AND (Line2:\"Quan9\" AND PostalCode:\"99999\")", actual);
         }
 ```
- Work well if have empty or null value 
+#####Work well if have empty or null value 
 ```
         [Test]
         public void ShouldNotAppendValueIfNullAndBeforeSymbolSyntax()
