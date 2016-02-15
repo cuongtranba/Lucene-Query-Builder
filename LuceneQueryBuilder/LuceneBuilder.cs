@@ -24,7 +24,7 @@ namespace LuceneQueryBuilder
 
         public ILogicSymbolFluent WhereEquals<TProp>(Expression<Func<TProp>> expression)
         {
-            return Add(GetPropertyNameAndValue(expression, SymbolSyntaxTemplate.WhereEquals));
+            return Add(BuildField(expression, SymbolSyntaxTemplate.WhereEquals));
         }
 
         public ILogicSymbolFluent Pharase(Action<IFieldFluent> action)
@@ -37,18 +37,34 @@ namespace LuceneQueryBuilder
 
         public ILogicSymbolFluent Not<TProp>(Expression<Func<TProp>> expression)
         {
-            return Add(GetPropertyNameAndValue(expression, SymbolSyntaxTemplate.Not));
+            return Add(BuildField(expression, SymbolSyntaxTemplate.Not));
         }
 
         public ILogicSymbolFluent StartWith<TProp>(Expression<Func<TProp>> expression)
         {
-            return Add(GetPropertyNameAndValue(expression, SymbolSyntaxTemplate.StartWith));
+            return Add(BuildField(expression, SymbolSyntaxTemplate.StartWith));
         }
 
         public ILogicSymbolFluent EndWith<TProp>(Expression<Func<TProp>> expression)
         {
-            return Add(GetPropertyNameAndValue(expression, SymbolSyntaxTemplate.EndWith));
+            return Add(BuildField(expression, SymbolSyntaxTemplate.EndWith));
         }
+
+        public ILogicSymbolFluent Range<TProp>(Expression<Func<TProp>> expression, object value1, object value2)
+        {
+
+            var body = expression.Body as MemberExpression;
+
+            TProp value = expression.Compile()();
+
+
+            if (value == null || String.IsNullOrEmpty(value.ToString()))
+            {
+                return Add(String.Empty); ;
+            }
+            return Add(String.Format("{0}:[{1} TO {2}]", body.Member.Name, value1, value2));
+        }
+
 
         public static LuceneBuilder Create()
         {
@@ -60,7 +76,7 @@ namespace LuceneQueryBuilder
         /// <returns></returns>
         public override string ToString()
         {
-            if (listSyntax.All(c=>c==SymbolSyntaxTemplate.BeginPharase || c== SymbolSyntaxTemplate.EndPharase))
+            if (listSyntax.All(c => c == SymbolSyntaxTemplate.BeginPharase || c == SymbolSyntaxTemplate.EndPharase))
             {
                 listSyntax.Clear();
             }
@@ -105,7 +121,7 @@ namespace LuceneQueryBuilder
             listSyntax.Add(value);
             return this;
         }
-        private string GetPropertyNameAndValue<TProp>(Expression<Func<TProp>> expression, string type)
+        private string BuildField<TProp>(Expression<Func<TProp>> expression, string type)
         {
             var body = expression.Body as MemberExpression;
 
@@ -115,6 +131,7 @@ namespace LuceneQueryBuilder
             {
                 return String.Empty;
             }
+
             var luceneField = new LuceneField()
             {
                 FieldName = body.Member.Name,

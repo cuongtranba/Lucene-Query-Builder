@@ -120,5 +120,11 @@ namespace LuceneQueryBuilder.Test
             StringAssert.AreEqualIgnoringCase("-City:HCM AND Line1:\"Phuoc binh\"", actual);
         }
 
+        [Test]
+        public void RangeTest()
+        {
+            var actual = LuceneBuilder.Create().Range(() => address.StateCode,1,2).ToString();
+            StringAssert.AreEqualIgnoringCase("StateCode:[1 TO 2]", actual);
+        }
     }
 }

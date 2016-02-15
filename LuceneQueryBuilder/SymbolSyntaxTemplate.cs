@@ -12,7 +12,8 @@ namespace LuceneQueryBuilder
         public const string BeginPharase = "(";
         public const string EndPharase = ")";
         public const string Pharase = "({})";
-        public static string WhereEquals = "{0}:\"{1}\"";
+        public const string WhereEquals = "{0}:\"{1}\"";
+        public const string Range = "{0}:[{1} TO {2}]";
         public static List<string> SymbolSyntaxtList=new List<string>()
         {
             And,EndWith,Or,Not,StartWith
