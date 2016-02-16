@@ -1,4 +1,5 @@
-# Lucene Query Builder [![Build Status](https://travis-ci.org/cuongtranba/Lucene-Query-Builder.svg?branch=master)](https://travis-ci.org/cuongtranba/Lucene-Query-Builder)
+# Lucene Query Builder [![Build Status](https://travis-ci.org/cuongtranba/Lucene-Query-Builder.svg?branch=master)](https://travis-ci.org/cuongtranba/Lucene-Query-Builder) [![Build status](https://ci.appveyor.com/api/projects/status/q57j8mqtxyyj2p8q?svg=true)](https://ci.appveyor.com/project/herrylove72/lucene-query-builder-vxsik)
+
 
 
 This library help reduce magic string when we create query clause by lucene
