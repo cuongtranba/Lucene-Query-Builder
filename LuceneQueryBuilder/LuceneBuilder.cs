@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace LuceneQueryBuilder
 {
@@ -52,16 +51,7 @@ namespace LuceneQueryBuilder
 
         public ILogicSymbolFluent Range<TProp>(Expression<Func<TProp>> expression, object value1, object value2)
         {
-
             var body = expression.Body as MemberExpression;
-
-            TProp value = expression.Compile()();
-
-
-            if (value == null || String.IsNullOrEmpty(value.ToString()))
-            {
-                return Add(String.Empty); ;
-            }
             return Add(String.Format("{0}:[{1} TO {2}]", body.Member.Name, value1, value2));
         }
 
