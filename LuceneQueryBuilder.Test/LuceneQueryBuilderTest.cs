@@ -1,5 +1,4 @@
-﻿using System;
-using LuceneQueryBuilder.Test.ModelSample;
+﻿using LuceneQueryBuilder.Test.ModelSample;
 using NUnit.Framework;
 
 namespace LuceneQueryBuilder.Test
@@ -125,6 +124,13 @@ namespace LuceneQueryBuilder.Test
         {
             var actual = LuceneBuilder.Create().Range(() => address.StateCode,1,2).ToString();
             StringAssert.AreEqualIgnoringCase("StateCode:[1 TO 2]", actual);
+        }
+
+        [Test]
+        public void RangeWithSomeSymbolsTest()
+        {
+            var actual = LuceneBuilder.Create().Range(() => address.StateCode, 1, 2).And().Not(() => address.Country).ToString();
+            StringAssert.AreEqualIgnoringCase("StateCode:[1 TO 2] AND -Country:VietNam", actual);
         }
     }
 }
