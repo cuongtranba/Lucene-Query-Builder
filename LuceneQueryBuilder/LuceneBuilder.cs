@@ -14,12 +14,12 @@ namespace LuceneQueryBuilder
 
         IFieldFluent ILogicSymbolFluent.And()
         {
-            return Add(SymbolSyntaxTemplate.And, true);
+            return AddOperator(SymbolSyntaxTemplate.And);
         }
 
         IFieldFluent ILogicSymbolFluent.Or()
         {
-            return Add(SymbolSyntaxTemplate.Or, true);
+            return AddOperator(SymbolSyntaxTemplate.Or);
         }
 
         public ILogicSymbolFluent WhereEquals<TProp>(Expression<Func<TProp>> expression)
@@ -50,7 +50,7 @@ namespace LuceneQueryBuilder
             return Add(BuildField(expression, SymbolSyntaxTemplate.EndWith));
         }
 
-        public ILogicSymbolFluent Range<TProp>(Expression<Func<TProp>> expression, object value1, object value2)
+        public ILogicSymbolFluent Range<TProp>(Expression<Func<TProp>> expression, object from, object to)
         {
 
             var body = expression.Body as MemberExpression;
@@ -62,7 +62,7 @@ namespace LuceneQueryBuilder
             {
                 return Add(String.Empty); ;
             }
-            return Add(String.Format("{0}:[{1} TO {2}]", body.Member.Name, value1, value2));
+            return Add(String.Format("{0}:[{1} TO {2}]", body.Member.Name, from, to));
         }
 
 
@@ -87,16 +87,9 @@ namespace LuceneQueryBuilder
             return queryText.ToString();
         }
 
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="isOperator"></param>
-        /// <returns></returns>
-        private LuceneBuilder Add(string value, bool isOperator = false)
+        private LuceneBuilder Add(string value)
         {
-            if (!listSyntax.IsEmpty() && (value == String.Empty && isOperator == false))
+            if (!listSyntax.IsEmpty() && value == String.Empty )
             {
                 if (listSyntax.PeekLast() == SymbolSyntaxTemplate.BeginPharase)
                 {
@@ -105,13 +98,18 @@ namespace LuceneQueryBuilder
                 listSyntax.PopLast();
                 return this;
             }
-            if (isOperator && !listSyntax.IsEmpty())
+            listSyntax.Add(value);
+            return this;
+        }
+
+        private LuceneBuilder AddOperator(string value)
+        {
+            if (!listSyntax.IsEmpty())
             {
                 if (listSyntax.PeekLast() == SymbolSyntaxTemplate.BeginPharase)
                 {
                     return this;
                 }
-
                 if (listSyntax.PeekLast() == String.Empty)
                 {
                     listSyntax.PopLast();
